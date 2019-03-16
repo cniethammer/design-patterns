@@ -212,11 +212,6 @@ public:
 		return _log_level;
 	}
 
-	/// switch on / off output
-	bool set_do_output(bool val) {
-		return _do_output = val;
-	}
-
 	/// initialize starting time
 	void init_starting_time() {
 #ifdef USE_GETTIMEOFDAY
