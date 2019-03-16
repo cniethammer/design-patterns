@@ -219,10 +219,6 @@ public:
 		return _do_output = val;
 	}
 
-	bool get_do_output() {
-		return _do_output;
-	}
-
 	/// initialize starting time
 	void init_starting_time() {
 #ifdef USE_GETTIMEOFDAY
