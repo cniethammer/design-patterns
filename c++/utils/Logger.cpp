@@ -42,10 +42,7 @@ Logger::~Logger() {
 
 /// allow logging only for a single process
 void Logger::set_mpi_output_root(int root) {
-	if (_rank != root)
-		_do_output = false;
-	else
-		_do_output = true;
+    set_mpi_output_ranks(std::vector<int>({root}));
 }
 
 /// all processes shall perform logging
