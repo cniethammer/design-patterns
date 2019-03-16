@@ -1,17 +1,17 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#define USE_GETTIMEOFDAY
-
 #include <iostream>
 #include <fstream>
-#include <cstdlib>
 #include <iomanip>
 #include <map>
 #include <ctime>
 #include <string>
 #include <sstream>
+#include <vector>
 
+
+#define USE_GETTIMEOFDAY
 #ifdef USE_GETTIMEOFDAY
 #include <sys/time.h>
 #endif
@@ -192,10 +192,6 @@ public:
 	Logger& error() {
 		return msg_level(Error);
 	}
-	Logger& error_always_output() {
-		_do_output = true;
-		return msg_level(Error);
-	}
 	Logger& warning() {
 		return msg_level(Warning);
 	}
@@ -216,15 +212,6 @@ public:
 		return _log_level;
 	}
 
-	/// switch on / off output
-	bool set_do_output(bool val) {
-		return _do_output = val;
-	}
-
-	bool get_do_output() {
-		return _do_output;
-	}
-
 	/// initialize starting time
 	void init_starting_time() {
 #ifdef USE_GETTIMEOFDAY
@@ -243,7 +230,7 @@ public:
 	void set_mpi_output_all();
 
 	/// allow a set of processes for logging
-	bool set_mpi_output_ranks(int num_nums, int* nums);
+	bool set_mpi_output_ranks(const std::vector<int> ranks);
 
 }; /* end of class Logger */
 } /* end of namespace */

@@ -2,6 +2,8 @@
 
 #include "Logger.h"
 
+#include <algorithm>
+
 namespace Log {
 
 Logger *global_log;
@@ -40,10 +42,7 @@ Logger::~Logger() {
 
 /// allow logging only for a single process
 void Logger::set_mpi_output_root(int root) {
-	if (_rank != root)
-		_do_output = false;
-	else
-		_do_output = true;
+    set_mpi_output_ranks(std::vector<int>({root}));
 }
 
 /// all processes shall perform logging
@@ -52,12 +51,13 @@ void Logger::set_mpi_output_all() {
 }
 
 /// allow a set of processes for logging
-bool Logger::set_mpi_output_ranks(int num_nums, int* nums) {
-	int i;
-	for(i = 0; i < num_nums; i++)
-		if (nums[i] == _rank)
-			_do_output = true;
-	return _do_output;
+bool Logger::set_mpi_output_ranks(const std::vector<int> ranks) {
+    if (std::find(ranks.begin(), ranks.end(), _rank) == ranks.end()) {
+        _do_output = true;
+    } else {
+        _do_output = false;
+    }
+    return _do_output;
 }
 
 } /* end namespace Log */
