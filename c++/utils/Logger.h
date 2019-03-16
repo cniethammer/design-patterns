@@ -8,6 +8,8 @@
 #include <ctime>
 #include <string>
 #include <sstream>
+#include <vector>
+
 
 #define USE_GETTIMEOFDAY
 #ifdef USE_GETTIMEOFDAY
@@ -233,7 +235,7 @@ public:
 	void set_mpi_output_all();
 
 	/// allow a set of processes for logging
-	bool set_mpi_output_ranks(int num_nums, int* nums);
+	bool set_mpi_output_ranks(const std::vector<int> ranks);
 
 }; /* end of class Logger */
 } /* end of namespace */
