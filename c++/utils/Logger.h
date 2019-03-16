@@ -1,8 +1,6 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#define USE_GETTIMEOFDAY
-
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -11,6 +9,7 @@
 #include <string>
 #include <sstream>
 
+#define USE_GETTIMEOFDAY
 #ifdef USE_GETTIMEOFDAY
 #include <sys/time.h>
 #endif
