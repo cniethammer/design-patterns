@@ -190,10 +190,6 @@ public:
 	Logger& error() {
 		return msg_level(Error);
 	}
-	Logger& error_always_output() {
-		_do_output = true;
-		return msg_level(Error);
-	}
 	Logger& warning() {
 		return msg_level(Warning);
 	}
