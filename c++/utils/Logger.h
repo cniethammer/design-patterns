@@ -55,18 +55,20 @@ extern Log::Logger *global_log;
 #endif
 
 /**
- * list of available log levels
- * For each level a name has to be specified in the constructor of the Logger() class.
- * This name will be prepended later on to the log message. */
-typedef enum {
-	None    = 0,  /* supress output */
-	Fatal   = 1,  /* program exit */
-	Error   = 2,  /* program corrected */
-	Warning = 4,  /* perhaps wrong */
-	Info    = 8,  /* user info */
-	Debug   = 16, /* detailed info for debugging */
+ * Available log levels
+ * Levels have to be sorted in a way that more detailed levels have higher values.
+ * For each level a name has to be specified in the init_log_levels() method
+ * of the Logger() class. This name will be prepended later on to the log message.
+ */
+enum class logLevel {
+	None,      /* supress output */
+	Fatal,     /* unrecoverable error, program exit */
+	Error,     /* error preventing to continue correctly in this part */
+	Warning,   /* abnormal or unexpeced,  perhaps wrong */
+	Info,      /* user info */
+	Debug,     /* detailed info for debugging */
 	All
-} logLevel;
+};
 
 /** @brief The Logger class provides a simple interface to handle log messages.
  *
@@ -104,15 +106,15 @@ private:
 
 	/// initilaize the list of log levels with the corresponding short names
 	void init_log_levels() {
-		logLevelNames.insert(std::pair<logLevel, std::string>(Fatal,   "FATAL ERROR"));
-		logLevelNames.insert(std::pair<logLevel, std::string>(Error,   "ERROR"      ));
-		logLevelNames.insert(std::pair<logLevel, std::string>(Warning, "WARNING"    ));
-		logLevelNames.insert(std::pair<logLevel, std::string>(Info,    "INFO"       ));
-		logLevelNames.insert(std::pair<logLevel, std::string>(Debug,   "DEBUG"      ));
+		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Fatal,   "FATAL ERROR"));
+		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Error,   "ERROR"      ));
+		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Warning, "WARNING"    ));
+		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Info,    "INFO"       ));
+		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Debug,   "DEBUG"      ));
 	}
 
 	// don't allow copy-construction
-	Logger(const Logger&) : _log_level(Log::Error), _msg_log_level(Log::Error), _do_output(true),
+	Logger(const Logger&) : _log_level(logLevel::Error), _msg_log_level(logLevel::Error), _do_output(true),
 			_filename(""), _log_stream(0), logLevelNames(), _starttime(), _rank(0)
 	{ }
 
@@ -122,7 +124,7 @@ private:
 public:
 	/** Initializes the log level, log stream and the list of log level names.
 	 * If ENABLE_MPI is enabled by default all process perform logging output. */
-	Logger(logLevel level = Log::Error, std::ostream *os = &(std::cout));
+	Logger(logLevel level = logLevel::Error, std::ostream *os = &(std::cout));
 
 	Logger(logLevel level, std::string prefix);
 
@@ -187,19 +189,19 @@ public:
 
 	/// shorthand versions for easy usage of the different log levels
 	Logger& fatal() {
-		return msg_level(Fatal);
+		return msg_level(logLevel::Fatal);
 	}
 	Logger& error() {
-		return msg_level(Error);
+		return msg_level(logLevel::Error);
 	}
 	Logger& warning() {
-		return msg_level(Warning);
+		return msg_level(logLevel::Warning);
 	}
 	Logger& info() {
-		return msg_level(Info);
+		return msg_level(logLevel::Info);
 	}
 	Logger& debug() {
-		return msg_level(Debug);
+		return msg_level(logLevel::Debug);
 	}
 
 	/// set log level
