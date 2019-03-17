@@ -106,11 +106,11 @@ private:
 
 	/// initilaize the list of log levels with the corresponding short names
 	void init_log_levels() {
-		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Fatal,   "FATAL ERROR"));
-		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Error,   "ERROR"      ));
-		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Warning, "WARNING"    ));
-		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Info,    "INFO"       ));
-		logLevelNames.insert(std::pair<logLevel, std::string>(logLevel::Debug,   "DEBUG"      ));
+		logLevelNames.insert({logLevel::Fatal,   "FATAL ERROR"});
+		logLevelNames.insert({logLevel::Error,   "ERROR"      });
+		logLevelNames.insert({logLevel::Warning, "WARNING"    });
+		logLevelNames.insert({logLevel::Info,    "INFO"       });
+		logLevelNames.insert({logLevel::Debug,   "DEBUG"      });
 	}
 
 	// don't allow copy-construction
