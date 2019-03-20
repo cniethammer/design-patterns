@@ -7,6 +7,7 @@
 #include <string>
 
 using namespace Log;
+using namespace Catch::Matchers;
 
 TEST_CASE( "Log levels working", "[functionality]" ) {
     std::ostringstream log_output;
@@ -14,39 +15,39 @@ TEST_CASE( "Log levels working", "[functionality]" ) {
     Logger logger(logLevel::None, &log_output);
 
     logger.fatal()   << "fatal message";
-    REQUIRE( log_output.str().find("fatal message") == std::string::npos );
+    REQUIRE_THAT( log_output.str(), !Contains("fatal message") );
 
     logger.set_log_level(logLevel::Fatal);
     logger.fatal()   << "fatal message";
-    REQUIRE( log_output.str().find("fatal message") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("fatal message") );
 
     logger.error()   << "error message";
-    REQUIRE( log_output.str().find("error message") == std::string::npos );
+    REQUIRE_THAT( log_output.str(), !Contains("error message") );
 
     logger.set_log_level(logLevel::Error);
     logger.error()   << "error message";
-    REQUIRE( log_output.str().find("error message") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("error message") );
 
     logger.warning() << "warning message";
-    REQUIRE( log_output.str().find("warning message") == std::string::npos );
+    REQUIRE_THAT( log_output.str(), !Contains("warning message") );
 
     logger.set_log_level(logLevel::Warning);
     logger.warning() << "warning message";
-    REQUIRE( log_output.str().find("warning message") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("warning message") );
 
     logger.info()    << "info message";
-    REQUIRE( log_output.str().find("info message") == std::string::npos );
+    REQUIRE_THAT( log_output.str(), !Contains("info message") );
 
     logger.set_log_level(logLevel::Info);
     logger.info()    << "info message";
-    REQUIRE( log_output.str().find("info message") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("info message") );
 
     logger.debug()   << "debug message";
-    REQUIRE( log_output.str().find("debug message") == std::string::npos );
+    REQUIRE_THAT( log_output.str(), !Contains("debug message") );
 
     logger.set_log_level(logLevel::Debug);
     logger.debug()   << "debug message";
-    REQUIRE( log_output.str().find("debug message") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("debug message") );
 
     log_output.str("");
     logger.set_log_level(logLevel::None);
@@ -55,18 +56,18 @@ TEST_CASE( "Log levels working", "[functionality]" ) {
     logger.warning() << "no output";
     logger.info()    << "no output";
     logger.debug()   << "no output";
-    REQUIRE( log_output.str().find("no output") == std::string::npos );
+    REQUIRE_THAT( log_output.str(), !Contains("no output") );
 
     log_output.str("");
     logger.set_log_level(logLevel::All);
     logger.fatal()   << "all output fatal";
-    REQUIRE( log_output.str().find("all output fatal") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("all output fatal") );
     logger.error()   << "all output error";
-    REQUIRE( log_output.str().find("all output error") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("all output error") );
     logger.warning() << "all output warning";
-    REQUIRE( log_output.str().find("all output warning") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("all output warning") );
     logger.info()    << "all output info";
-    REQUIRE( log_output.str().find("all output info") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("all output info") );
     logger.debug()   << "all output debug";
-    REQUIRE( log_output.str().find("all output debug") != std::string::npos );
+    REQUIRE_THAT( log_output.str(), Contains("all output debug") );
 }
