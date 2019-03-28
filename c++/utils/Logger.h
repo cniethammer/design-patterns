@@ -1,20 +1,14 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
+#include <chrono>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <map>
-#include <ctime>
 #include <string>
 #include <sstream>
 #include <vector>
-
-
-#define USE_GETTIMEOFDAY
-#ifdef USE_GETTIMEOFDAY
-#include <sys/time.h>
-#endif
 
 #ifdef ENABLE_MPI
 #include <mpi.h>
@@ -96,11 +90,7 @@ private:
 	std::string _filename;
 	std::ostream *_log_stream;
 	std::map<logLevel, std::string> logLevelNames;
-#ifdef USE_GETTIMEOFDAY
-	timeval _starttime;
-#else
-	time_t _starttime;
-#endif
+	std::chrono::steady_clock::time_point _starttime;
 
 	int _rank;
 
@@ -164,24 +154,17 @@ public:
 		using namespace std;
 		_msg_log_level = level;
 		if (_msg_log_level <= _log_level && _do_output) {
+			*_log_stream << logLevelNames[level] << ":\t";
 			// Include timestamp
-			time_t t;
-			t = time(NULL);
-			tm* lt = localtime(&t);
-			//*_log_stream << ctime(&t) << " ";
+			auto now_sys_time = std::chrono::system_clock::now();
+			auto itt = std::chrono::system_clock::to_time_t(now_sys_time);
 			stringstream timestampstream;
-			// maybe sprintf is easier here...
-			timestampstream << setfill('0') << setw(4) << (1900 + lt->tm_year) << setw(2) << (1 + lt->tm_mon) << setw(2) << lt->tm_mday << "T" << setw(2) << lt->tm_hour << setw(2) << lt->tm_min << setw(2) << lt->tm_sec;
-			*_log_stream << logLevelNames[level] << ":\t" << timestampstream.str() << " ";
-			//timestampstream.str(""); timestampstream.clear();
-#ifdef USE_GETTIMEOFDAY
-			timeval tod;
-			gettimeofday(&tod, 0);
-			*_log_stream << setw(8) << tod.tv_sec - _starttime.tv_sec + (tod.tv_usec - _starttime.tv_usec) / 1.E6 << " ";
-#else
-			*_log_stream << t-_starttime << "\t";
-#endif
-
+			timestampstream << setfill('0') << std::put_time(localtime(&itt), "%FT%T%Z");
+			*_log_stream << timestampstream.str() << " ";
+			// Include time since begin of logging
+			auto now = std::chrono::steady_clock::now();
+			*_log_stream << setw(12) << std::chrono::duration<double>(now - _starttime).count() << " ";
+			// Include MPI rank
 			*_log_stream << "[" << _rank << "]\t";
 		}
 		return *this;
@@ -216,11 +199,7 @@ public:
 
 	/// initialize starting time
 	void init_starting_time() {
-#ifdef USE_GETTIMEOFDAY
-		gettimeofday(&_starttime, 0);
-#else
-		_starttime = time(NULL);
-#endif
+		_starttime = std::chrono::steady_clock::now();
 	}
 
 	/* methods for easy handling of output processes */

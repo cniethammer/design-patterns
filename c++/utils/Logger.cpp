@@ -30,7 +30,7 @@ Logger::Logger(logLevel level, std::string prefix) :  _log_level(level), _msg_lo
 #endif
 	filenamestream << ".log";
 	_filename = filenamestream.str();
-	_log_stream = new std::ofstream(_filename.c_str());
+	_log_stream = new std::ofstream(_filename);
 }
 
 Logger::~Logger() {
