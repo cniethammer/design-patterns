@@ -19,6 +19,15 @@ static std::string join(const std::vector<T>& vec, const std::string delimiter) 
 	return ss.str();
 }
 
+template <typename T>
+T string_to_type(const std::string& str) {
+	if(str == "") {return T();}
+	std::stringstream str_stream(str);
+	T value;
+	str_stream >> value;
+	return value;
+}
+
 }
 
 #endif
