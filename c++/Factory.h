@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "utils/Logger.h"
-#include "utils/String_utils.h"
+#include "utils/string_utils.h"
 
 
 /** @brief macro used to simplify the registration of plugins in the constructor.
