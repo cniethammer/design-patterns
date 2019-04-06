@@ -10,9 +10,12 @@ namespace string_utils {
 template <typename T>
 static std::string join(const std::vector<T>& vec, const std::string delimiter) {
 	std::stringstream ss;
-	for(auto elem : vec) {
-		ss << elem;
-		if (elem != vec.back()) {
+	auto first = begin(vec), last = end(vec);
+	if (first != last) {
+		while (true) {
+			ss << *first++;
+			if (first == last)
+				break;
 			ss << delimiter;
 		}
 	}
