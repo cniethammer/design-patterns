@@ -37,7 +37,7 @@ static std::vector<T> split(const std::string& str, const std::string delimiter 
 	size_t pos = 0;
 	size_t end = str.find(delimiter);
 	while(end != std::string::npos) {
-		split_vec.push_back(string_to_type<T>(str.substr(pos, end)));
+		split_vec.push_back(string_to_type<T>(str.substr(pos, end - pos)));
 		pos = end + delimiter.length();
 		end = str.find(delimiter, pos);
 	}
