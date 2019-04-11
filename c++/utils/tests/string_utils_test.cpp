@@ -64,3 +64,13 @@ TEST_CASE("split<int>(' 1,2,3 ',',') returns [1,2,3]", "[split]") {
   REQUIRE(vec[2] == 3);
   REQUIRE(vec.size() == 3);
 }
+
+TEST_CASE("split<string>('test1#,#test2#,#test3','#,#') returns "
+          "['test1','test2','test3']",
+          "[split]") {
+  auto vec = split<std::string>("test1#,#test2#,#test3", "#,#");
+  REQUIRE(vec[0] == "test1");
+  REQUIRE(vec[1] == "test2");
+  REQUIRE(vec[2] == "test3");
+  REQUIRE(vec.size() == 3);
+}
